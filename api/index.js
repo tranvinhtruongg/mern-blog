@@ -21,3 +21,13 @@ app.listen(3000,()=>{console.log('sever is running port 3000')})
 
 app.use('/api/user',userRoutes)
 app.use('/api/auth',authRoutes)
+
+app.use((err,req,res,next)=>{
+    const statusCode = err.statusCode || 500;
+    const message = err.message || 'Internal sever Error';
+    res.status(statusCode).json({
+        suscces:false,
+        statusCode,
+        message
+    })
+})
