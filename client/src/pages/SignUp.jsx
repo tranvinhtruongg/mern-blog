@@ -50,7 +50,7 @@ export default function SignUp() {
             Blog
         </Link>
         <p className="text-sm mt-5">
-          Bạn cần phải đăng nhập với email và mật khẩu hoặc tài khoản Google
+          Bạn cần phải đăng ký với email và mật khẩu hoặc tài khoản Google
         </p>
         </div>
         {/* right */}
@@ -97,7 +97,7 @@ export default function SignUp() {
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Đã có tài khoản?</span>
-            <Link to='/sign-in' className="text-blue-500">Đăng ký</Link>
+            <Link to='/sign-in' className="text-blue-500">Đăng nhập</Link>
           </div>
           {
             errorMessage &&(
