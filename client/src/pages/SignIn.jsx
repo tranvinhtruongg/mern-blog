@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { SignInStart,signInSuccess,signInFailure } from "../redux/user/userSlice";
+import Oauth from "../conponents/Oauth";
 
 
 export default function SignIn() {
@@ -82,9 +83,10 @@ export default function SignIn() {
                   <span className='pl-3'>Loading...</span>
                 </>
               ) : (
-                'Sign Up'
+                'Đăng nhập'
               )}
             </Button>
+            <Oauth />
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Chưa có tài khoản?</span>
