@@ -5,18 +5,15 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
         unique:true,
-        minlength: 6
     },
     email:{
         type:String,
         required:true,
         unique:true,
-        match:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
     },
     password:{
         type: String,
         required:true,
-        minlength: 8
     },
     profilePicture:{
         type:String,
