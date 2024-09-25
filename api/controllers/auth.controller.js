@@ -22,7 +22,7 @@ export const signup = async (req,res,next)=>{
 
     try{
         await newUser.save();
-        res.json('Đăng nhập thành công');
+        res.json('Đăng ký thành công');
     }
     catch(err){
         next(err)
