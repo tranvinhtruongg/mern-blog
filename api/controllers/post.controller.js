@@ -56,3 +56,16 @@ export const getposts = async(req, res,next) => {
         next(err)
     }
 }
+
+export const deletePost = async(req, res,next) => {
+    if(!req.user.isAdmin || req.user.id !== req.params.userId){
+        return next(errorHandler(403, 'Bạn không có quyền thực hiện chức năng này'))
+    }
+    try{
+        await Post.findOneAndDelete(req.params.postId);
+        res.status(200).json({message: 'Xóa bài viết thành công'})
+    }
+    catch(err){
+        next(err)
+    }
+}
