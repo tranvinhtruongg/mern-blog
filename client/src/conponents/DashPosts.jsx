@@ -6,7 +6,10 @@ import { Link } from 'react-router-dom';
 export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user);
   const [userPosts, setUserPosts] = useState([]);
-  console.log(userPosts);
+  const [showMore, setShowMore] = useState(true); // Quản lý hiển thị nút "Xem thêm"
+  const [expanded, setExpanded] = useState(false); // Quản lý trạng thái mở rộng/thu gọn
+  const initialPostCount = 9; // Số bài viết ban đầu
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -14,6 +17,10 @@ export default function DashPosts() {
         const data = await res.json();
         if (res.ok) {
           setUserPosts(data.posts);
+          // Nếu số lượng bài viết ít hơn 9, không hiển thị nút "Xem thêm"
+          if (data.posts.length < initialPostCount) {
+            setShowMore(false);
+          }
         }
       } catch (error) {
         console.log(error.message);
@@ -23,6 +30,33 @@ export default function DashPosts() {
       fetchPosts();
     }
   }, [currentUser._id, currentUser.isAdmin]);
+
+  const handleShowMore = async () => {
+    if (!expanded) {
+      // Mở rộng danh sách bài viết
+      const startIndex = userPosts.length;
+      try {
+        const res = await fetch(
+          `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
+        );
+        const data = await res.json();
+        if (res.ok) {
+          setUserPosts((prev) => [...prev, ...data.posts]);
+          // Nếu số bài viết nhận được ít hơn 9, không tải thêm được nữa
+          if (data.posts.length < initialPostCount) {
+            setShowMore(false); // Không còn bài để tải thêm
+          }
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    } else {
+      // Thu gọn danh sách bài viết về trạng thái ban đầu
+      setUserPosts((prev) => prev.slice(0, initialPostCount));
+      setShowMore(true); // Cho phép hiện lại nút "Xem thêm" sau khi thu gọn
+    }
+    setExpanded(!expanded); // Đổi trạng thái mở rộng/thu gọn
+  };
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100
@@ -81,6 +115,10 @@ export default function DashPosts() {
               ))}
             </Table.Body>
           </Table>
+          {/* Luôn hiển thị nút dù đang ở chế độ mở rộng hay thu gọn */}
+          <button onClick={handleShowMore} className='w-full text-teal-500 self-center text-sm py-7'>
+            {expanded ? 'Thu gọn' : 'Xem thêm'}
+          </button>
         </>
       ) : (
         <p>Bạn chưa có bài viết nào!</p>
