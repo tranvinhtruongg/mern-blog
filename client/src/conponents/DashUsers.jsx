@@ -62,8 +62,34 @@ export default function DashUsers() {
   };
 
   const handleDeleteUser = async () => {
-
+    try {
+      // Gửi yêu cầu DELETE đến endpoint backend với id của người dùng cần xóa
+      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+        method: 'DELETE', // Sử dụng phương thức DELETE để xóa người dùng
+      });
+  
+      // Chuyển đổi phản hồi từ server sang định dạng JSON
+      const data = await res.json();
+  
+      // Kiểm tra nếu phản hồi từ server là thành công (HTTP status 200-299)
+      if (res.ok) {
+        // Cập nhật lại danh sách người dùng trong React state
+        // Bằng cách loại bỏ người dùng có id trùng với userIdToDelete
+        setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+  
+        // Đóng modal sau khi quá trình xóa hoàn tất
+        setShowModal(false);
+      } else {
+        // Nếu server phản hồi không thành công, in thông báo lỗi từ phản hồi ra console
+        console.log(data.message);
+      }
+    } catch (error) {
+      // Nếu có lỗi xảy ra trong quá trình thực hiện yêu cầu (ví dụ, lỗi mạng)
+      // In thông báo lỗi ra console
+      console.log(error.message);
+    }
   }
+  
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100
