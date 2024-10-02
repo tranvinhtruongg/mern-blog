@@ -57,7 +57,7 @@ export const getposts = async(req, res,next) => {
     }
 }
 
-export const deletePost = async(req, res,next) => {
+export const deletepost = async(req, res,next) => {
     if(!req.user.isAdmin || req.user.id !== req.params.userId){
         return next(errorHandler(403, 'Bạn không có quyền thực hiện chức năng này'))
     }
@@ -67,5 +67,34 @@ export const deletePost = async(req, res,next) => {
     }
     catch(err){
         next(err)
+    }
+}
+
+export const updatepost = async(req, res, next) => {
+    // Kiểm tra xem người dùng có quyền là admin hoặc là chủ sở hữu của bài viết không
+    if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+        // Nếu không có quyền, trả về lỗi 403 - Forbidden
+        return next(errorHandler(403, 'You are not allowed to update this post'));
+    }
+
+    try {
+        // Tìm bài viết theo postId từ URL và cập nhật các trường title, content, category, image
+        const updatedPost = await Post.findByIdAndUpdate(
+          req.params.postId,  // Lấy postId từ tham số URL
+          {
+            $set: {
+              title: req.body.title,      // Lấy title từ phần body của request
+              content: req.body.content,  // Lấy content từ body
+              category: req.body.category, // Lấy category từ body
+              image: req.body.image,      // Lấy image từ body
+            },
+          },
+          { new: true } // Tùy chọn này trả về document đã cập nhật thay vì document trước khi cập nhật
+        );
+        // Trả về response thành công kèm với bài viết đã được cập nhật
+        res.status(200).json(updatedPost);
+    } catch (error) {
+        // Nếu xảy ra lỗi, chuyển sang middleware xử lý lỗi
+        next(error);
     }
 }
