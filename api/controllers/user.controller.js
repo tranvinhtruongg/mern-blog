@@ -76,3 +76,63 @@ export const signout = (req, res,next) => {
     next(error);
   }
 }
+export const getUsers = async (req, res, next) => {
+  // Kiểm tra xem người dùng hiện tại có phải là admin hay không
+  if (!req.user.isAdmin) {
+    // Nếu không phải admin, trả về lỗi 403 và không cho phép truy cập
+    return next(errorHandler(403, 'Bạn không có quyền truy cập'));
+  }
+
+  try {
+    // Lấy startIndex từ query string (nếu có), mặc định là 0 nếu không có giá trị
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    
+    // Lấy limit từ query string (nếu có), mặc định là 9 nếu không có giá trị
+    const limit = parseInt(req.query.limit) || 9;
+    
+    // Lấy hướng sắp xếp từ query string: 'asc' (tăng dần) hoặc 'desc' (giảm dần)
+    // Mặc định sẽ là giảm dần (sortDirection = -1) nếu không có giá trị
+    const sortDirection = req.query.sort === 'asc' ? 1 : -1;
+
+    // Lấy danh sách người dùng từ cơ sở dữ liệu MongoDB
+    // Sắp xếp theo ngày tạo (createdAt), bỏ qua các phần tử trước startIndex, và giới hạn số lượng theo limit
+    const users = await User.find()
+      .sort({ createdAt: sortDirection }) // Sắp xếp người dùng theo thứ tự tăng hoặc giảm dần
+      .skip(startIndex)                   // Bỏ qua các phần tử theo startIndex (phân trang)
+      .limit(limit);                      // Giới hạn số lượng người dùng trả về theo limit
+
+    // Loại bỏ trường password khỏi mỗi đối tượng user trước khi trả về
+    // Sử dụng map() để duyệt qua từng user và loại trường password bằng cú pháp destructuring
+    const usersWithoutPassword = users.map((user) => {
+      const { password, ...rest } = user._doc; // Lấy tất cả các trường khác ngoài password
+      return rest; // Trả về phần còn lại của đối tượng user mà không có password
+    });
+
+    // Đếm tổng số người dùng trong cơ sở dữ liệu
+    const totalUsers = await User.countDocuments();
+
+    // Tạo một đối tượng Date hiện tại
+    const now = new Date();
+
+    // Tạo một đối tượng Date đại diện cho một tháng trước so với ngày hiện tại
+    const oneMonthAgo = new Date(
+      now.getFullYear(),  // Lấy năm hiện tại
+      now.getMonth() - 1, // Lấy tháng trước
+      now.getDate()       // Lấy ngày hiện tại
+    );
+
+    // Đếm số lượng người dùng được tạo trong khoảng thời gian một tháng vừa qua
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },  // Lọc người dùng có createdAt từ một tháng trước đến hiện tại
+    });
+
+    // Trả về response với các thông tin:
+    // 1. Danh sách người dùng không chứa password
+    // 2. Tổng số người dùng
+    // 3. Số lượng người dùng được tạo trong một tháng qua
+    res.status(200).json({ users: usersWithoutPassword, totalUsers, lastMonthUsers });
+  } catch (error) {
+    // Nếu có lỗi xảy ra, chuyển lỗi sang middleware xử lý lỗi
+    next(error);
+  }
+};
