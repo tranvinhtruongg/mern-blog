@@ -5,14 +5,14 @@ export default function CallToAction() {
     <div className='flex flex-col sm:flex-row p-3 border border-teal-500 justify-center items-center rounded-tl-3xl rounded-br-3xl text-center'>
         <div className="flex-1 justify-center flex flex-col">
             <h2 className='text-2xl'>
-                Want to learn more about JavaScript?
+                Bạn muốn trở nên thông thái
             </h2>
             <p className='text-gray-500 my-2'>
-                Checkout these resources with 100 JavaScript Projects
+                hãy đăng ký ngay để nhận thông báo mới
             </p>
             <Button gradientDuoTone='purpleToPink' className='rounded-tl-xl rounded-bl-none'>
                 <a href="https://www.fb.com/truongdzzz" target='_blank' rel='noopener noreferrer'>
-                    100 JavaScript Projects
+                    Đừng bỏ lỡ những điều hay bổ ích ở đây nhé!
                 </a>
             </Button>
         </div>
