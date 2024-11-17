@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { SignInStart,signInSuccess,signInFailure } from "../redux/user/userSlice";
 import Oauth from "../conponents/Oauth";
+import { toast } from "react-toastify";
 
 
 export default function SignIn() {
@@ -32,6 +33,7 @@ export default function SignIn() {
       }
       if(res.ok){
         dispatch(signInSuccess(data))
+        toast.success('Đăng nhập thành công!');
         navigate('/')
       }
     }

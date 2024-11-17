@@ -7,6 +7,7 @@ import { app } from "../firebase";
 import {CircularProgressbar} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {useNavigate} from 'react-router-dom';
+import { toast } from "react-toastify";
 
 export default function CreatePost() {
   const [file,setFile] = useState(null);
@@ -71,10 +72,11 @@ export default function CreatePost() {
       }
       if(res.ok){
         setPublishError(null);
-        alert('Đăng bài thành công');
+        toast.success('Đăng bài thành công');
         navigate(`/post/${data.slug}`);
       }
     }catch(error){
+      toast.error('Đăng bài thất bại');
       setPublishError('Đăng bài thất bại');
     }
   }

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { signoutSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 export default function DashSidebar() {
     const location = useLocation();
     const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export default function DashSidebar() {
         if (!res.ok) {
           console.log(data.message);
         } else {
+          toast.success('Đăng xuất thành công');
           dispatch(signoutSuccess());
         }
       } catch (error) {
@@ -36,6 +38,13 @@ export default function DashSidebar() {
     <Sidebar className='w-full md:w-56'>
         <Sidebar.Items>
             <Sidebar.ItemGroup className='flex flex-col gap-1'>
+            {currentUser.isAdmin && (
+              <Link to='/dashboard?tab=visitor'>
+                <Sidebar.Item active={tab==='visitor'} icon={HiDocumentText} as='div'>
+                  Thống kê lượt truy cập
+                </Sidebar.Item>
+              </Link>
+            )}
             {currentUser && currentUser.isAdmin && (
               <Link to='/dashboard?tab=dash'>
                 <Sidebar.Item

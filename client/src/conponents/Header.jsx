@@ -6,6 +6,7 @@ import {useSelector,useDispatch} from 'react-redux'
 import { toggleTheme } from "../redux/theme/themeSlice";
 import { signoutSuccess } from "../redux/user/userSlice";
 import { useEffect, useState } from 'react';
+import { toast } from "react-toastify";
 
 export default function Header() {
     const path =useLocation().pathname
@@ -31,6 +32,7 @@ export default function Header() {
           if (!res.ok) {
             console.log(data.message);
           } else {
+            toast.success('Đăng xuất thành công');
             dispatch(signoutSuccess());
           }
         } catch (error) {

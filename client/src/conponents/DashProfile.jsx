@@ -9,6 +9,7 @@ import { updateStart,updateFailure,updateSuccess,deleteFailure,deleteStart,delet
 import { useDispatch } from 'react-redux';
 import {HiOutlineExclamationCircle} from 'react-icons/hi';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 export default function DashProfile() {
     const { currentUser,error, loading } = useSelector((state) => state.user);
     const [imageFile, setImageFile] = useState(null);
@@ -147,6 +148,7 @@ export default function DashProfile() {
           if (!res.ok) {
             console.log(data.message);
           } else {
+            toast.success('Đăng xuất thành công');
             dispatch(signoutSuccess());
           }
         } catch (error) {

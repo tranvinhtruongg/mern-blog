@@ -2,6 +2,7 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Oauth from "../conponents/Oauth";
+import { toast } from "react-toastify";
 
 
 export default function SignUp() {
@@ -31,6 +32,7 @@ export default function SignUp() {
       }
       setLoading(false)
       if(res.ok){
+        toast.success('Đăng ký thành công!');
         navigate('/sign-in')
       }
     }

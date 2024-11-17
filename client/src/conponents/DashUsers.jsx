@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { FaCheck, FaTimes } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user);
@@ -75,6 +76,7 @@ export default function DashUsers() {
       if (res.ok) {
         // Cập nhật lại danh sách người dùng trong React state
         // Bằng cách loại bỏ người dùng có id trùng với userIdToDelete
+        toast.success(data.message);
         setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
   
         // Đóng modal sau khi quá trình xóa hoàn tất

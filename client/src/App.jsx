@@ -14,8 +14,25 @@ import UpdatePost from './pages/UpdatePost'
 import PostPage from './pages/PostPage'
 import ScrollToTop from './conponents/ScrollToTop'
 import Search from './pages/Search'
+import axios from 'axios'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react'
 
 export default function App() {
+  useEffect(() => {
+    const recordVisit = async () => {
+        try {
+            const response = await axios.post('/api/visitors/record'); // Đường dẫn này dựa vào proxy
+            console.log("Visitor recorded successfully:", response.data);
+        } catch (error) {
+            console.error('Lỗi khi ghi nhận lượt truy cập:', error.response ? error.response.data : error.message);
+        }
+    };
+
+    recordVisit();
+}, []);
+
   return (
     <BrowserRouter >
     <ScrollToTop />
@@ -38,6 +55,7 @@ export default function App() {
         <Route path='/post/:postSlug' element={<PostPage />} />
       </Routes>
       <Footer/>
+    <ToastContainer/>
     </BrowserRouter>
   )
 }

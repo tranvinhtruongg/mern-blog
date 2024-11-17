@@ -8,6 +8,7 @@ import {CircularProgressbar} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {useNavigate,useParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
+import { toast } from "react-toastify";
 
 export default function UpdatePost() {
   const [file,setFile] = useState(null);
@@ -105,9 +106,11 @@ export default function UpdatePost() {
       }
       if(res.ok){
         setPublishError(null);
+        toast.success('Cập nhật bài viết thành công!');
         navigate(`/post/${data.slug}`);
       }
     }catch(error){
+      toast.error('Đăng bài thất bại');
       setPublishError('Đăng bài thất bại');
     }
   }
