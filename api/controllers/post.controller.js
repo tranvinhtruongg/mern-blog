@@ -4,9 +4,9 @@ import { errorHandler } from "../utils/error.js"
 export const create = async(req, res,next) => {
     
     
-    if(!req.user.isAdmin){
-        return next(errorHandler(403, 'Bạn không có quyền thực hiện chức năng này'))
-    }
+    // if(!req.user.isAdmin){
+    //     return next(errorHandler(403, 'Bạn không có quyền thực hiện chức năng này'))
+    // }
     if(!req.body.title || !req.body.content){
         return next(errorHandler(400, 'Vui lòng nhập đủ thông tin'))
     }

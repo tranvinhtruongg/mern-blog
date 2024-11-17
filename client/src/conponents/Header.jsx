@@ -34,6 +34,7 @@ export default function Header() {
           } else {
             toast.success('Đăng xuất thành công');
             dispatch(signoutSuccess());
+            navigate('/');
           }
         } catch (error) {
           console.log(error.message);

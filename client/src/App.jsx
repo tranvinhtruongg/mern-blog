@@ -44,11 +44,11 @@ export default function App() {
         <Route path='/sign-in' element={<SignIn/>}></Route>
         <Route path='/sign-up' element={<SignUp/>}></Route>
         <Route path='/search' element={<Search/>}></Route>
+        <Route path='/create-post' element={<CreatePost />} />
         <Route element={<PrivateRoute />}>
           <Route path='/dashboard' element={<Dashboard />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
-          <Route path='/create-post' element={<CreatePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
         </Route>
         <Route path='/projects' element={<Projects/>}></Route>

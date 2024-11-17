@@ -8,7 +8,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { updateStart,updateFailure,updateSuccess,deleteFailure,deleteStart,deleteSuccess,signoutSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import {HiOutlineExclamationCircle} from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 export default function DashProfile() {
     const { currentUser,error, loading } = useSelector((state) => state.user);
@@ -23,6 +23,7 @@ export default function DashProfile() {
     const [formData, setFormData] = useState({});
     const filePickerRef = useRef();
     const dispatch = useDispatch();
+    const navigate = useNavigate
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -150,6 +151,7 @@ export default function DashProfile() {
           } else {
             toast.success('Đăng xuất thành công');
             dispatch(signoutSuccess());
+            navigate('/');
           }
         } catch (error) {
           console.log(error.message);
@@ -192,13 +194,13 @@ export default function DashProfile() {
             <Button type='submit'  gradientDuoTone='purpleToBlue' outline disabled={loading || imageFileUploading}>
               {loading ? 'Đang cập nhật...' : 'Cập nhật'}
               </Button>
-            {currentUser.isAdmin && (
+            {/* {currentUser.isAdmin && ( */}
               <Link to={'/create-post'}>
                 <Button type='button' gradientDuoTone='purpleToPink' className='w-full'>
                   Tạo bài viết
                 </Button>
               </Link>
-            )}
+            {/* )} */}
         </form>
         <div className="text-red-500 flex justify-between mt-5">
             <span onClick={()=>setShowModal(true)} className='cursor-pointer'>Xóa tài khoản</span>

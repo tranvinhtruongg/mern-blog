@@ -1,6 +1,6 @@
 import {Sidebar} from 'flowbite-react';
 import {HiAnnotation, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiUser,HiChartPie} from 'react-icons/hi';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { signoutSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ export default function DashSidebar() {
     const dispatch = useDispatch();
     const {currentUser} = useSelector(state => state.user)
     const [tab,setTab] = useState('')
+  const navigate = useNavigate()
     useEffect(()=>{
       const urlParams = new URLSearchParams(location.search)
       const tabFromUrl = urlParams.get('tab')
@@ -29,6 +30,7 @@ export default function DashSidebar() {
         } else {
           toast.success('Đăng xuất thành công');
           dispatch(signoutSuccess());
+          navigate('/');
         }
       } catch (error) {
         console.log(error.message);
