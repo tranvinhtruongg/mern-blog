@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import PostCard from '../conponents/PostCard';
 import FloatingWidget from '../conponents/FloatingWidget';
 import Slider from "react-slick";
+import axios from 'axios';
+import ChatbotAI from '../conponents/ChatBoxAI';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -15,15 +17,17 @@ export default function Home() {
     { id: 3, image: 'banner3.png' },
     { id: 4, image: 'banner4.png' },
   ];
+// cần sửa ở đây
+useEffect(() => {
+  const fetchPosts = async () => {
+    const res = await fetch('/api/post/getPosts');
+    const data = await res.json();
+    setPosts(data.posts);
+  };
+  fetchPosts();
+}, []);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await fetch('/api/post/getPosts');
-      const data = await res.json();
-      setPosts(data.posts);
-    };
-    fetchPosts();
-  }, []);
+
 
 // Custom Arrow Components with SVG
 const SampleNextArrow = (props) => {
