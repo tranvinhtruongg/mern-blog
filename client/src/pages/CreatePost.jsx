@@ -146,7 +146,7 @@ export default function CreatePost() {
             }
           }
         />
-        <Button type='submit' gradientDuoTone='purpleToPink'>
+        <Button type='submit' gradientDuoTone='greenToBlue'>
           Đăng bài
         </Button>
         {

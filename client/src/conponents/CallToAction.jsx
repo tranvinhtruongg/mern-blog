@@ -10,7 +10,7 @@ export default function CallToAction() {
             <p className='text-gray-500 my-2'>
                 hãy đăng ký ngay để nhận thông báo mới
             </p>
-            <Button gradientDuoTone='purpleToPink' className='rounded-tl-xl rounded-bl-none'>
+            <Button gradientDuoTone='greenToBlue' className='rounded-tl-xl rounded-bl-none'>
                 <a href="https://www.fb.com/truongdzzz" target='_blank' rel='noopener noreferrer'>
                     Đừng bỏ lỡ những điều hay bổ ích ở đây nhé!
                 </a>

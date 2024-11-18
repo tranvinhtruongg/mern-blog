@@ -184,7 +184,7 @@ export default function UpdatePost() {
             }
           }
         />
-        <Button type='submit' gradientDuoTone='purpleToPink'>
+        <Button type='submit' gradientDuoTone='greenToBlue'>
           Cập nhật
         </Button>
         {

@@ -196,7 +196,7 @@ export default function DashProfile() {
               </Button>
             {/* {currentUser.isAdmin && ( */}
               <Link to={'/create-post'}>
-                <Button type='button' gradientDuoTone='purpleToPink' className='w-full'>
+                <Button type='button' gradientDuoTone='greenToBlue' className='w-full'>
                   Tạo bài viết
                 </Button>
               </Link>

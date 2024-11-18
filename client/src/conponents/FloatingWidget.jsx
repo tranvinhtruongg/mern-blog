@@ -1,5 +1,5 @@
 // FloatingWidget.jsx
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 
 function FloatingWidget() {
   const [showScrollToTop, setShowScrollToTop] = useState(false);
