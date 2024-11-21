@@ -18,6 +18,7 @@ import axios from 'axios'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react'
+import ChatAI from './pages/ChatAI'
 
 export default function App() {
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function App() {
         <Route path='/sign-in' element={<SignIn/>}></Route>
         <Route path='/sign-up' element={<SignUp/>}></Route>
         <Route path='/search' element={<Search/>}></Route>
+        <Route path='/chatai' element={<ChatAI/>}></Route>
         <Route path='/create-post' element={<CreatePost />} />
         <Route element={<PrivateRoute />}>
           <Route path='/dashboard' element={<Dashboard />} />

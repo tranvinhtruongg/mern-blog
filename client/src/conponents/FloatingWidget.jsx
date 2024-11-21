@@ -42,15 +42,8 @@ function FloatingWidget() {
         <img src="thumbnail.png" alt="Email" className="w-8 h-8 pulse" />
       </a>
 
-      {/* Messenger Button */}
-      <a 
-        href="https://m.me" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="bg-gradient-to-br from-blue-500 to-pink-500 p-3 rounded-full shadow-lg border-4 border-blue-100 floating-button"
-      >
-        <img src="ic-msg.png" alt="Messenger" className="w-8 h-8 pulse" />
-      </a>
+
+
 
       {/* Back to Top Button */}
       {showScrollToTop && (

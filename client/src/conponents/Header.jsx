@@ -127,6 +127,11 @@ export default function Header() {
                     Dự án
                 </Link>
             </Navbar.Link>
+            <Navbar.Link active={path === '/chatai'} as={'div'}>
+                <Link to='/chatai'>
+                    ChatTVT
+                </Link>
+            </Navbar.Link>
         </Navbar.Collapse>
     </Navbar>
   )

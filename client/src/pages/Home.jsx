@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import PostCard from '../conponents/PostCard';
 import FloatingWidget from '../conponents/FloatingWidget';
 import Slider from "react-slick";
-import axios from 'axios';
-import ChatbotAI from '../conponents/ChatBoxAI';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
