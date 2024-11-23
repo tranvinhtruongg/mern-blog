@@ -120,10 +120,12 @@ export default function Search() {
               value={sidebarData.category}
               id='category'
             >
-              <option value='uncategorized'>Chưa phân loại</option>
-              <option value='reactjs'>React.js</option>
-              <option value='nextjs'>Next.js</option>
-              <option value='javascript'>JavaScript</option>
+            <option value='uncategorized'>Chọn danh mục</option>
+            <option value='maytinh'>Máy tính</option>
+            <option value='phanmem'>Phần mềm & Games</option>
+            <option value='vuichoigiaitri'>Khu vui chơi giải trí</option>
+            <option value='thuongmai'>Khu thương mại</option>
+            <option value='congnghe'>Sản phẩm công nghệ</option>
             </Select>
           </div>
           <Button type='submit' outline gradientDuoTone='greenToBlue'>
