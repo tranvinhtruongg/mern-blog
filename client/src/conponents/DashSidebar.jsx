@@ -84,6 +84,14 @@ export default function DashSidebar() {
                   </Link>
                   </>
                 )}
+                {currentUser.isAdmin && (
+                  <Link to="/dashboard?tab=approve">
+                    <Sidebar.Item active={tab === 'approve'} icon={HiDocumentText} as="div">
+                      Duyệt bài
+                    </Sidebar.Item>
+                  </Link>
+                )}
+
                 <Sidebar.Item  icon={HiArrowSmRight} className='cursor-pointer' onClick={handleSignout}>
                     Đăng xuất
                 </Sidebar.Item>

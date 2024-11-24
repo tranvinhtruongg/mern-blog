@@ -15,24 +15,28 @@ export default function DashPosts() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      try {
-        const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
-        const data = await res.json();
-        if (res.ok) {
-          setUserPosts(data.posts);
-          // Nếu số lượng bài viết ít hơn 9, không hiển thị nút "Xem thêm"
-          if (data.posts.length < initialPostCount) {
-            setShowMore(false);
-          }
+        try {
+            const res = await fetch(`/api/post/getposts`);
+            // const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
+            const data = await res.json();
+            
+            if (res.ok && data.posts) {
+                setUserPosts(data.posts);
+                if (data.posts.length < initialPostCount) {
+                    setShowMore(false); // Không hiển thị nút "Xem thêm" nếu ít hơn số bài yêu cầu
+                }
+            } else {
+                console.error('Failed to fetch posts:', data.message || 'Unknown error');
+            }
+        } catch (error) {
+            console.error('Error fetching posts:', error.message);
         }
-      } catch (error) {
-        console.log(error.message);
-      }
     };
+
     if (currentUser.isAdmin) {
-      fetchPosts();
+        fetchPosts();
     }
-  }, [currentUser._id, currentUser.isAdmin]);
+}, [currentUser._id, currentUser.isAdmin]);
 
   const handleShowMore = async () => {
     if (!expanded) {
@@ -90,94 +94,93 @@ export default function DashPosts() {
         console.log(error.message);
     }
 };
-
-  return (
-    <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100
-     scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser.isAdmin && userPosts.length > 0 ? (
-        <>
-          <Table hoverable className='shadow-md'>
-            <Table.Head>
-              <Table.HeadCell>Date updated</Table.HeadCell>
-              <Table.HeadCell>Post image</Table.HeadCell>
-              <Table.HeadCell>Post title</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-              <Table.HeadCell>Delete</Table.HeadCell>
-              <Table.HeadCell>
-                <span>Edit</span>
-              </Table.HeadCell>
-            </Table.Head>
-            <Table.Body className='divide-y'>
-              {userPosts.map((post) => (
-                <Table.Row key={post._id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                  <Table.Cell>
-                    {new Date(post.updatedAt).toLocaleDateString()}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className='w-20 h-10 object-cover bg-gray-500'
-                      />
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      className='font-medium text-gray-900 dark:text-white'
-                      to={`/post/${post.slug}`}
-                    >
-                      {post.title}
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>{post.category}</Table.Cell>
-                  <Table.Cell>
-                    <span onClick={()=>{
-                      setShowModal(true)
-                      setPostIdToDelete(post._id)
-                    }} className='font-medium text-red-500 hover:underline cursor-pointer'>
-                      Delete
-                    </span>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      className='text-teal-500 hover:underline'
-                      to={`/update-post/${post._id}`}
-                    >
-                      <span>Edit</span>
-                    </Link>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-          {/* Luôn hiển thị nút dù đang ở chế độ mở rộng hay thu gọn */}
-          <button onClick={handleShowMore} className='w-full text-teal-500 self-center text-sm py-7'>
-            {expanded ? 'Thu gọn' : 'Xem thêm'}
-          </button>
-        </>
-      ) : (
-        <p>Bạn chưa có bài viết nào!</p>
-      )}
-        <Modal show={showModal} onClose={()=>setShowModal(false)} popup size='md'>
-          <Modal.Header/>
-          <Modal.Body>
-          <div className='text-center'>
-            <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
-            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-              Bạn có chắc chắn muốn xóa bài viết này?
-            </h3>
-            <div className='flex justify-center gap-4'>
-              <Button color='failure' onClick={handleDeletePost}>
-                Vâng, tôi muốn xóa.
-              </Button>
-              <Button color='gray' onClick={() => setShowModal(false)}>
-                No, cancel
-              </Button>
-            </div>
+return (
+  <div className="table-auto overflow-x-scroll md:mx-auto p-3">
+    {currentUser.isAdmin && userPosts.length > 0 ? (
+      <>
+        <Table hoverable className="shadow-md">
+          <Table.Head>
+            <Table.HeadCell>Ngày chỉnh sửa</Table.HeadCell>
+            <Table.HeadCell>Ảnh bài viết</Table.HeadCell>
+            <Table.HeadCell>Post title</Table.HeadCell>
+            <Table.HeadCell>Danh mục</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Delete</Table.HeadCell>
+            <Table.HeadCell>Edit</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {userPosts.map((post) => (
+              <Table.Row key={post._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Cell>{new Date(post.updatedAt).toLocaleDateString()}</Table.Cell>
+                <Table.Cell>
+                  <Link to={`/post/${post.slug}`}>
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-20 h-10 object-cover"
+                    />
+                  </Link>
+                </Table.Cell>
+                <Table.Cell>
+                  <Link className="font-medium text-gray-900 dark:text-white" to={`/post/${post.slug}`}>
+                    {post.title}
+                  </Link>
+                </Table.Cell>
+                <Table.Cell>{post.category}</Table.Cell>
+                <Table.Cell>
+                  {/* Hiển thị trạng thái bài viết */}
+                  {post.isApproved ? (
+                    <span className="text-green-500 font-semibold">Chấp nhận</span>
+                  ) : (
+                    <span className="text-red-500 font-semibold">Từ chối</span>
+                  )}
+                </Table.Cell>
+                <Table.Cell>
+                  <span
+                    onClick={() => {
+                      setShowModal(true);
+                      setPostIdToDelete(post._id);
+                    }}
+                    className="font-medium text-red-500 hover:underline cursor-pointer"
+                  >
+                    Delete
+                  </span>
+                </Table.Cell>
+                <Table.Cell>
+                  <Link className="text-teal-500 hover:underline" to={`/update-post/${post._id}`}>
+                    Edit
+                  </Link>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+        <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7">
+          {expanded ? 'Thu gọn' : 'Xem thêm'}
+        </button>
+      </>
+    ) : (
+      <p className="text-center text-gray-500">Bạn chưa có bài viết nào!</p>
+    )}
+    <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
+      <Modal.Header />
+      <Modal.Body>
+        <div className="text-center">
+          <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 mb-4 mx-auto" />
+          <h3 className="mb-5 text-lg text-gray-500">
+            Bạn có chắc chắn muốn xóa bài viết này?
+          </h3>
+          <div className="flex justify-center gap-4">
+            <Button color="failure" onClick={handleDeletePost}>
+              Vâng, tôi muốn xóa.
+            </Button>
+            <Button color="gray" onClick={() => setShowModal(false)}>
+              No, cancel
+            </Button>
           </div>
-        </Modal.Body>
-        </Modal>
-    </div>
-  );
+        </div>
+      </Modal.Body>
+    </Modal>
+  </div>
+);
 }

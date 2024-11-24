@@ -14,25 +14,26 @@ import UpdatePost from './pages/UpdatePost'
 import PostPage from './pages/PostPage'
 import ScrollToTop from './conponents/ScrollToTop'
 import Search from './pages/Search'
-import axios from 'axios'
+// import axios from 'axios'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 import ChatAI from './pages/ChatAI'
+import DashApprovePost from './conponents/DashApprovePost';
 
 export default function App() {
-  useEffect(() => {
-    const recordVisit = async () => {
-        try {
-            const response = await axios.post('/api/visitors/record'); // Đường dẫn này dựa vào proxy
-            console.log("Visitor recorded successfully:", response.data);
-        } catch (error) {
-            console.error('Lỗi khi ghi nhận lượt truy cập:', error.response ? error.response.data : error.message);
-        }
-    };
+//   useEffect(() => {
+//     const recordVisit = async () => {
+//         try {
+//             const response = await axios.post('/api/visitors/record'); // Đường dẫn này dựa vào proxy
+//             console.log("Visitor recorded successfully:", response.data);
+//         } catch (error) {
+//             console.error('Lỗi khi ghi nhận lượt truy cập:', error.response ? error.response.data : error.message);
+//         }
+//     };
 
-    recordVisit();
-}, []);
+//     recordVisit();
+// }, []);
 
   return (
     <BrowserRouter >
@@ -46,11 +47,13 @@ export default function App() {
         <Route path='/sign-up' element={<SignUp/>}></Route>
         <Route path='/search' element={<Search/>}></Route>
         <Route path='/chatai' element={<ChatAI/>}></Route>
+        {/* <Route path='/approve' element={<ApprovePost/>}></Route> */}
         <Route path='/create-post' element={<CreatePost />} />
         <Route element={<PrivateRoute />}>
           <Route path='/dashboard' element={<Dashboard />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
+          <Route path="/admin/approve-posts" element={<DashApprovePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
         </Route>
         <Route path='/projects' element={<Projects/>}></Route>

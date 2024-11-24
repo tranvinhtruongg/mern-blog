@@ -18,9 +18,21 @@ export default function Home() {
 // cần sửa ở đây
 useEffect(() => {
   const fetchPosts = async () => {
-    const res = await fetch('/api/post/getPosts');
-    const data = await res.json();
-    setPosts(data.posts);
+    try {
+      const res = await fetch('/api/post/getposts');
+      if (!res.ok) {
+        console.error('Error fetching posts:', res.statusText); // Log lỗi
+        return;
+      }
+      const data = await res.json();
+      if (data.posts) {
+        setPosts(data.posts.filter((post) => post.isApproved)); // Lọc bài viết đã duyệt
+      } else {
+        console.error('No posts data returned from the API.');
+      }
+    } catch (err) {
+      console.error('Fetch posts failed:', err.message); // Log lỗi
+    }
   };
   fetchPosts();
 }, []);
