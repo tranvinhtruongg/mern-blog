@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Table } from 'flowbite-react';
 import { useSelector } from 'react-redux';
+import {toast} from 'react-toastify';
 
 export default function DashApprovePost() {
   const { currentUser } = useSelector((state) => state.user);
@@ -33,6 +34,7 @@ export default function DashApprovePost() {
       });
       if (res.ok) {
         setPendingPosts((prev) => prev.filter((post) => post._id !== postId)); // Xóa bài đã duyệt
+        toast.success('Bài viết đã được chấp nhận.');
       }
     } catch (err) {
       console.error('Error approving post:', err.message);
@@ -47,6 +49,7 @@ export default function DashApprovePost() {
       });
       if (res.ok) {
         setPendingPosts((prev) => prev.filter((post) => post._id !== postId)); // Xóa bài bị từ chối
+        toast.success('Bài viết đã bị từ chối.');
       }
     } catch (err) {
       console.error('Error rejecting post:', err.message);
