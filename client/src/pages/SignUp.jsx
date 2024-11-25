@@ -48,9 +48,7 @@ export default function SignUp() {
         {/* left */}
         <div className="flex-1">
         <Link to="/" className=" font-bold dark:text-white text-4xl">
-              <span className="px-2 py-1 bg-gradient-to-r from-lime-500
-            via-sky-500 to-red-500 rounded-lg text-white">TVT Blog</span>
-            
+        <img src="/TVT.png" alt="logo" className="h-10"/>
         </Link>
         <p className="text-sm mt-5">
           Bạn cần phải đăng ký với email và mật khẩu hoặc tài khoản Google

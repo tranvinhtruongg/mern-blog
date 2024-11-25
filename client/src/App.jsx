@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ChatAI from './pages/ChatAI'
 import DashApprovePost from './conponents/DashApprovePost';
 import DashReport from './conponents/DashReport'
+import NotFound from './pages/NotFound'
 
 export default function App() {
 //   useEffect(() => {
@@ -56,10 +57,12 @@ export default function App() {
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/admin/approve-posts" element={<DashApprovePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
-          <Route path="/admin/reports" element={<DashReport />} />
+          <Route path="/dashboard/reports" element={<DashReport />} />
         </Route>
         <Route path='/projects' element={<Projects/>}></Route>
         <Route path='/post/:postSlug' element={<PostPage />} />
+        {/* Route cho 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer/>
     <ToastContainer/>

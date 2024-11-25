@@ -106,7 +106,8 @@ export default function PostPage() {
     'Tự tử, tự gây thương tích hoặc chứng rối loạn ăn uống',
     'Bạo lực, thù ghét hoặc bóc lột',
     'Lừa đảo gian lận hoặc mạo danh',
-    'Khác',
+    'Ảnh khỏa thân hoặc hoạt động tình dụng',
+    'Chỉ là tôi không thích nội dụng này',
   ];
 
   useEffect(() => {

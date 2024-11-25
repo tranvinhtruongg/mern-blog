@@ -2,16 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    height: 100vh;
+body {
+  height: 100vh;
 }
 
 .ql-editor {
-    font-size: 1.05rem;
+  font-size: 1.05rem;
 }
 
 .post-content p {
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 .post-content h1 {
   font-size: 1.5rem;
@@ -53,4 +53,74 @@ body{
 
 .pulse {
   animation: pulse 1.5s infinite;
+}
+/* Ngôi sao */
+.star {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: #ffd700; /* Màu vàng */
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  animation: orbit 3s linear infinite, sparkle-opacity 1.5s infinite ease-in-out;
+  transition: transform 0.3s ease-in-out, opacity 0.3s;
+}
+
+/* Quỹ đạo ngôi sao */
+.star-1 {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 0s;
+}
+
+.star-2 {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 0.5s;
+}
+
+.star-3 {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  animation-delay: 1s;
+}
+
+/* Animation di chuyển quanh quỹ đạo */
+@keyframes orbit {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(50px);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(50px);
+  }
+}
+
+/* Animation lấp lánh - chỉ tác động opacity */
+@keyframes sparkle-opacity {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Khi hover vào logo */
+.group:hover .star {
+  transform: scale(1.2); /* Ngôi sao phóng to */
+  opacity: 1; /* Tăng độ sáng */
 }

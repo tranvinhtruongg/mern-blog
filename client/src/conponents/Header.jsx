@@ -50,11 +50,26 @@ export default function Header() {
       };
   return (
     <Navbar className="border-b-2">
-        <Link to="/" className="self-center whitespace-nowrap text-sm 
-        sm:text-xl font-semibold dark:text-white">
-            <span className="px-2 py-1 bg-gradient-to-r from-lime-500
-            via-sky-500 to-red-500 rounded-lg text-white">TVT Blog</span>
+        <Link to="/" className="relative inline-block group">
+        <div className="absolute inset-0">
+            {/* Hiệu ứng sao */}
+            <div className="w-full h-full pointer-events-none">
+            <div className="star star-1"></div>
+            <div className="star star-2"></div>
+            <div className="star star-3"></div>
+            </div>
+        </div>
+        {/* Logo */}
+        <img 
+            src="/TVT.png" 
+            alt="logo" 
+            className="h-10 relative z-10 transition-transform duration-300 ease-in-out group-hover:scale-125"
+        />
         </Link>
+
+
+
+
         <form onSubmit={handleSubmit}>
             <TextInput
                 type="text"
