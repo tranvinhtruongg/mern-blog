@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // import { useEffect } from 'react'
 import ChatAI from './pages/ChatAI'
 import DashApprovePost from './conponents/DashApprovePost';
+import DashReport from './conponents/DashReport'
 
 export default function App() {
 //   useEffect(() => {
@@ -55,6 +56,7 @@ export default function App() {
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/admin/approve-posts" element={<DashApprovePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
+          <Route path="/admin/reports" element={<DashReport />} />
         </Route>
         <Route path='/projects' element={<Projects/>}></Route>
         <Route path='/post/:postSlug' element={<PostPage />} />

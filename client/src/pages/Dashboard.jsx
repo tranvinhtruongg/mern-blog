@@ -7,6 +7,7 @@ import DashUsers from '../conponents/DashUsers';
 import DashComments from '../conponents/DashComments';
 import DashboardComp from '../conponents/DashboardComp';
 import DashApprovePost from '../conponents/DashApprovePost';
+import DashReport from '../conponents/DashReport';
 
 export default function Dashboard() {
   const location = useLocation();
@@ -36,6 +37,8 @@ export default function Dashboard() {
       {tab === 'dash' && <DashboardComp/>}
       {/* approve */}
       {tab === 'approve' && <DashApprovePost />}
+      {/* report */}
+      {tab === 'reports' && <DashReport/>}
     </div>
   )
 }

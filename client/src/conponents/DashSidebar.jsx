@@ -91,6 +91,13 @@ export default function DashSidebar() {
                     </Sidebar.Item>
                   </Link>
                 )}
+                {currentUser.isAdmin && (
+                  <Link to="/dashboard?tab=reports">
+                    <Sidebar.Item active={tab === "reports"} icon={HiDocumentText} as="div">
+                      Bài viết vi phạm
+                    </Sidebar.Item>
+                  </Link>
+                )}
 
                 <Sidebar.Item  icon={HiArrowSmRight} className='cursor-pointer' onClick={handleSignout}>
                     Đăng xuất

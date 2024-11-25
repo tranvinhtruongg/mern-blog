@@ -175,7 +175,7 @@ return (
               Vâng, tôi muốn xóa.
             </Button>
             <Button color="gray" onClick={() => setShowModal(false)}>
-              No, cancel
+              Không, hủy.
             </Button>
           </div>
         </div>
