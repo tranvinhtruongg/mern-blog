@@ -41,9 +41,9 @@ export const getposts = async (req, res, next) => {
                     { content: { $regex: req.query.searchTerm, $options: 'i' } },
                 ],
             }),
-        }).sort({ createdAt: sortDirection }).skip(startIndex).limit(limit);
+        }).populate('userId', 'username') // Lấy thông tin `username` từ User
+        .sort({ createdAt: sortDirection }).skip(startIndex).limit(limit);
 
-        console.log("Posts fetched:", posts);
 
         const totalPost = await Post.countDocuments();
         const now = new Date();

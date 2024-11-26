@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
     userId:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Liên kết với bảng User
         required: true
     },
     content:{
