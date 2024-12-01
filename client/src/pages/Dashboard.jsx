@@ -69,7 +69,7 @@ export default function Dashboard() {
       // Kiểm tra nếu người dùng không phải admin và cố gắng truy cập tab admin
       if (
         !currentUser?.isAdmin &&
-        ['posts', 'users', 'comments', 'approve', 'reports'].includes(tabFromUrl)
+        [ 'users', 'comments', 'approve', 'reports'].includes(tabFromUrl)
       ) {
         toast.error('Bạn không có quyền truy cập vào trang này.');
         navigate('/'); // Chuyển hướng về trang chủ

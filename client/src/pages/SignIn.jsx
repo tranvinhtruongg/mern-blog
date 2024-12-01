@@ -91,6 +91,7 @@ export default function SignIn() {
           <div className="flex gap-2 text-sm mt-5">
             <span>Chưa có tài khoản?</span>
             <Link to='/sign-up' className="text-blue-500">Đăng ký</Link>
+            <Link to='/forgot-password' className="text-blue-500">Quên mật khẩu</Link>
           </div>
           {
             errorMessage &&(

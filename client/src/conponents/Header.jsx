@@ -139,7 +139,7 @@ export default function Header() {
             </Navbar.Link>
             <Navbar.Link active={path === '/projects'} as={'div'}>
                 <Link to='/projects'>
-                    Dự án
+                    Quy định chung
                 </Link>
             </Navbar.Link>
             <Navbar.Link active={path === '/chatai'} as={'div'}>
