@@ -124,3 +124,11 @@ body {
   transform: scale(1.2); /* Ngôi sao phóng to */
   opacity: 1; /* Tăng độ sáng */
 }
+
+/* ẩn bớt chữ dashcomments */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* You can adjust the max-width to suit your layout */
+}

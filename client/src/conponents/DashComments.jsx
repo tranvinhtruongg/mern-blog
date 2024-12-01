@@ -2,6 +2,7 @@ import { Button, Modal, Table } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
+import * as XLSX from 'xlsx'; // Import the XLSX library for Excel export
 
 export default function DashComments() {
   const { currentUser } = useSelector((state) => state.user);
@@ -29,7 +30,7 @@ export default function DashComments() {
       }
     };
     if (currentUser.isAdmin) {
-        fetchComments();
+      fetchComments();
     }
   }, [currentUser._id, currentUser.isAdmin]);
 
@@ -63,39 +64,55 @@ export default function DashComments() {
   const handleDeleteComments = async () => {
     setShowModal(false);
     try {
-      // Gửi yêu cầu DELETE đến endpoint backend với id của người dùng cần xóa
       const res = await fetch(`/api/comment/deletecomment/${commentIdToDelete}`, {
-        method: 'DELETE', // Sử dụng phương thức DELETE để xóa người dùng
+        method: 'DELETE', // Sử dụng phương thức DELETE để xóa bình luận
       });
-  
-      // Chuyển đổi phản hồi từ server sang định dạng JSON
+
       const data = await res.json();
-  
-      // Kiểm tra nếu phản hồi từ server là thành công (HTTP status 200-299)
+
       if (res.ok) {
-        // Cập nhật lại danh sách người dùng trong React state
-        // Bằng cách loại bỏ người dùng có id trùng với commentsIdToDelete
-        setComments((prev) => prev.filter((comments) => comments._id !== commentIdToDelete));
-  
-        // Đóng modal sau khi quá trình xóa hoàn tất
+        setComments((prev) => prev.filter((comment) => comment._id !== commentIdToDelete));
         setShowModal(false);
       } else {
-        // Nếu server phản hồi không thành công, in thông báo lỗi từ phản hồi ra console
         console.log(data.message);
       }
     } catch (error) {
-      // Nếu có lỗi xảy ra trong quá trình thực hiện yêu cầu (ví dụ, lỗi mạng)
-      // In thông báo lỗi ra console
       console.log(error.message);
     }
-  }
-  
+  };
+
+  // Export function for comments
+  const handleExportExcel = () => {
+    const exportData = comments.map(comment => ({
+      'Date Updated': new Date(comment.updatedAt).toLocaleDateString(),
+      'Comment Content': comment.content.length > 100 ? `${comment.content.slice(0, 100)}...` : comment.content,
+      'Number of Likes': comment.numberOfLikes,
+      'Post ID': comment.postId,
+      'User ID': comment.userId,
+    }));
+
+    // Create a workbook and append the data
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Comments');
+
+    // Export to Excel file
+    XLSX.writeFile(wb, 'Comments.xlsx');
+  };
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100
      scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {currentUser.isAdmin && comments.length > 0 ? (
         <>
+          {/* Button to export to Excel */}
+          <div className='flex justify-between p-3 text-sm font-semibold'>
+            <h1 className='text-center p-2'>Comment Management</h1>
+            <Button outline gradientDuoTone='greenToBlue' onClick={handleExportExcel}>
+              Export to Excel
+            </Button>
+          </div>
+
           <Table hoverable className='shadow-md'>
             <Table.Head>
               <Table.HeadCell>Date updated</Table.HeadCell>
@@ -111,18 +128,18 @@ export default function DashComments() {
                   <Table.Cell>
                     {new Date(comment.updatedAt).toLocaleDateString()}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="truncate">
                     {comment.content}
                   </Table.Cell>
                   <Table.Cell>
-                      {comment.numberOfLikes}
+                    {comment.numberOfLikes}
                   </Table.Cell>
                   <Table.Cell>{comment.postId}</Table.Cell>
                   <Table.Cell>
                     {comment.userId}
                   </Table.Cell>
                   <Table.Cell>
-                    <span onClick={()=>{
+                    <span onClick={() => {
                       setShowModal(true)
                       setCommentIdToDelete(comment._id)
                     }} className='font-medium text-red-500 hover:underline cursor-pointer'>
@@ -133,19 +150,18 @@ export default function DashComments() {
               ))}
             </Table.Body>
           </Table>
-          {/* Luôn hiển thị nút dù đang ở chế độ mở rộng hay thu gọn */}
-              
+
           <button onClick={handleShowMore} className='w-full text-teal-500 self-center text-sm py-7'>
             {expanded ? 'Thu gọn' : 'Xem thêm'}
           </button>
-
         </>
       ) : (
         <p>Không có bình luận nào!</p>
       )}
-        <Modal show={showModal} onClose={()=>setShowModal(false)} popup size='md'>
-          <Modal.Header/>
-          <Modal.Body>
+      
+      <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
+        <Modal.Header />
+        <Modal.Body>
           <div className='text-center'>
             <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
             <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
@@ -161,7 +177,7 @@ export default function DashComments() {
             </div>
           </div>
         </Modal.Body>
-        </Modal>
+      </Modal>
     </div>
   );
 }
