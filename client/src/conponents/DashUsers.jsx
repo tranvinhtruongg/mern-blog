@@ -4,6 +4,7 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import * as XLSX from 'xlsx'; // Import the XLSX library for Excel export
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user);
@@ -13,6 +14,7 @@ export default function DashUsers() {
   const [showModal, setShowModal] = useState(false); // Quản lý hiển thị modal
   const [userIdToDelete, setUserIdToDelete] = useState(''); // Lưu id bài viết cần xóa
   const initialUserCount = 9; // Số bài viết ban đầu
+  const [lastMonthUserCount, setLastMonthUserCount] = useState(0); // Số người dùng tạo tài khoản trong tháng vừa qua
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -25,13 +27,20 @@ export default function DashUsers() {
           if (data.users.length < initialUserCount) {
             setShowMore(false);
           }
+
+          // Tính số lượng người dùng tạo tài khoản trong tháng vừa qua
+          const now = new Date();
+          const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+          const filteredUsers = data.users.filter(user => new Date(user.createdAt) > lastMonth);
+          setLastMonthUserCount(filteredUsers.length);
         }
       } catch (error) {
         console.log(error.message);
       }
     };
+
     if (currentUser.isAdmin) {
-        fetchUser();
+      fetchUser();
     }
   }, [currentUser._id, currentUser.isAdmin]);
 
@@ -64,44 +73,110 @@ export default function DashUsers() {
 
   const handleDeleteUser = async () => {
     try {
-      // Gửi yêu cầu DELETE đến endpoint backend với id của người dùng cần xóa
       const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
         method: 'DELETE', // Sử dụng phương thức DELETE để xóa người dùng
       });
-  
-      // Chuyển đổi phản hồi từ server sang định dạng JSON
+
       const data = await res.json();
-  
-      // Kiểm tra nếu phản hồi từ server là thành công (HTTP status 200-299)
+
       if (res.ok) {
-        // Cập nhật lại danh sách người dùng trong React state
-        // Bằng cách loại bỏ người dùng có id trùng với userIdToDelete
         toast.success(data.message);
         setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
-  
-        // Đóng modal sau khi quá trình xóa hoàn tất
         setShowModal(false);
       } else {
-        // Nếu server phản hồi không thành công, in thông báo lỗi từ phản hồi ra console
         console.log(data.message);
       }
     } catch (error) {
-      // Nếu có lỗi xảy ra trong quá trình thực hiện yêu cầu (ví dụ, lỗi mạng)
-      // In thông báo lỗi ra console
       console.log(error.message);
     }
-  }
+  };
+
+  // Export function
+  const handleExportExcel = () => {
+    // Prepare data for export
+    const exportData = users.map(user => ({
+      'Date Created': new Date(user.createdAt).toLocaleDateString(),
+      'Username': user.username,
+      'Email': user.email,
+      'Admin': user.isAdmin ? 'Yes' : 'No',
+    }));
   
+    // Create a worksheet from the data
+    const ws = XLSX.utils.json_to_sheet(exportData);
+  
+    // Format headers
+    const headerStyle = {
+      font: { bold: true, color: { rgb: 'FFFFFF' } },
+      fill: { fgColor: { rgb: '4F81BD' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border: {
+        top: { style: 'thin', color: { rgb: '000000' } },
+        left: { style: 'thin', color: { rgb: '000000' } },
+        bottom: { style: 'thin', color: { rgb: '000000' } },
+        right: { style: 'thin', color: { rgb: '000000' } }
+      }
+    };
+  
+    // Apply header styles to the first row (headers)
+    const range = XLSX.utils.decode_range(ws['!ref']);
+    for (let col = range.s.c; col <= range.e.c; col++) {
+      const cell = ws[XLSX.utils.encode_cell({ r: range.s.r, c: col })];
+      if (cell) {
+        cell.s = headerStyle; // Apply style to header cells
+      }
+    }
+  
+    // Format date columns (optional)
+    ws['!cols'] = [
+      { width: 20 }, // 'Date Created' column width
+      { width: 25 }, // 'Username' column width
+      { width: 35 }, // 'Email' column width
+      { width: 10 }, // 'Admin' column width
+    ];
+  
+    // Add borders to data cells
+    const borderStyle = {
+      border: {
+        top: { style: 'thin', color: { rgb: '000000' } },
+        left: { style: 'thin', color: { rgb: '000000' } },
+        bottom: { style: 'thin', color: { rgb: '000000' } },
+        right: { style: 'thin', color: { rgb: '000000' } }
+      }
+    };
+  
+    // Loop through the data rows and apply border style
+    for (let row = range.s.r + 1; row <= range.e.r; row++) {
+      for (let col = range.s.c; col <= range.e.c; col++) {
+        const cell = ws[XLSX.utils.encode_cell({ r: row, c: col })];
+        if (cell) {
+          cell.s = borderStyle; // Apply border style to data cells
+        }
+      }
+    }
+  
+    // Create the workbook and append the worksheet
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Users');
+  
+    // Export the workbook as an Excel file
+    XLSX.writeFile(wb, 'Users.xlsx');
+  };
 
   return (
-    <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100
-     scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
+    <div className='p-3 table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {currentUser.isAdmin && users.length > 0 ? (
         <>
+          {/* Button to export to Excel */}
+          <div className='flex justify-between p-3 text-sm font-semibold'>
+            <h1 className='text-center p-2'>Quản lý người dùng</h1>
+            <Button outline gradientDuoTone='greenToBlue' onClick={handleExportExcel}>
+              Export to Excel
+            </Button>
+          </div>
+
           <Table hoverable className='shadow-md'>
             <Table.Head>
               <Table.HeadCell>Date created</Table.HeadCell>
-              <Table.HeadCell>User image</Table.HeadCell>
               <Table.HeadCell>Username</Table.HeadCell>
               <Table.HeadCell>Email</Table.HeadCell>
               <Table.HeadCell>Admin</Table.HeadCell>
@@ -113,20 +188,11 @@ export default function DashUsers() {
                   <Table.Cell>
                     {new Date(user.createdAt).toLocaleDateString()}
                   </Table.Cell>
-                  <Table.Cell>
-                      <img
-                        src={user.profilePicture}
-                        alt={user.username}
-                        className='w-10 h-10 object-cover bg-gray-500 rounded-full'
-                      />
-                  </Table.Cell>
-                  <Table.Cell>
-                      {user.username}
-                  </Table.Cell>
+                  <Table.Cell>{user.username}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
                   <Table.Cell>{user.isAdmin ? (<FaCheck className="text-green-500"/>) : (<FaTimes className="text-red-500"/>)}</Table.Cell>
                   <Table.Cell>
-                    <span onClick={()=>{
+                    <span onClick={() => {
                       setShowModal(true)
                       setUserIdToDelete(user._id)
                     }} className='font-medium text-red-500 hover:underline cursor-pointer'>
@@ -137,8 +203,7 @@ export default function DashUsers() {
               ))}
             </Table.Body>
           </Table>
-          {/* Luôn hiển thị nút dù đang ở chế độ mở rộng hay thu gọn */}
-              
+
           <button onClick={handleShowMore} className='w-full text-teal-500 self-center text-sm py-7'>
             {expanded ? 'Thu gọn' : 'Xem thêm'}
           </button>
@@ -147,9 +212,10 @@ export default function DashUsers() {
       ) : (
         <p>Không có người dùng nào!</p>
       )}
-        <Modal show={showModal} onClose={()=>setShowModal(false)} popup size='md'>
-          <Modal.Header/>
-          <Modal.Body>
+      
+      <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
+        <Modal.Header />
+        <Modal.Body>
           <div className='text-center'>
             <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
             <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
@@ -165,7 +231,7 @@ export default function DashUsers() {
             </div>
           </div>
         </Modal.Body>
-        </Modal>
+      </Modal>
     </div>
   );
 }
