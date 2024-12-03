@@ -22,6 +22,8 @@ import ChatAI from './pages/ChatAI'
 import DashApprovePost from './conponents/DashApprovePost';
 import DashReport from './conponents/DashReport'
 import NotFound from './pages/NotFound'
+import ResetPassword from './conponents/ResetPassword'
+import ForgotPassword from './conponents/ForgotPassword'
 
 export default function App() {
 //   useEffect(() => {
@@ -49,6 +51,8 @@ export default function App() {
         <Route path='/sign-up' element={<SignUp/>}></Route>
         <Route path='/search' element={<Search/>}></Route>
         <Route path='/chatai' element={<ChatAI/>}></Route>
+        <Route path="/forgot-password" element={<ForgotPassword/>} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         {/* <Route path='/approve' element={<ApprovePost/>}></Route> */}
         <Route path='/create-post' element={<CreatePost />} />
         <Route element={<PrivateRoute />}>
