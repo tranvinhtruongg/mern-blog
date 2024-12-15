@@ -1,7 +1,7 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Oauth from "../conponents/Oauth";
+import Oauth from "../conponents/Oauthh";
 import { toast } from "react-toastify";
 
 
