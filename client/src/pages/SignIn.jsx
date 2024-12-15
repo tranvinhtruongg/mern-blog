@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { SignInStart,signInSuccess,signInFailure } from "../redux/user/userSlice";
-import Oauth from "../conponents/Oauth";
+import Oauth from "../conponents/Oauthh";
 import { toast } from "react-toastify";
 
 
