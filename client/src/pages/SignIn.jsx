@@ -48,7 +48,7 @@ export default function SignIn() {
         {/* left */}
         <div className="flex-1">
         <Link to="/" className=" font-bold dark:text-white text-4xl">
-        <img src="/TVT.png" alt="logo" className="h-10"/>
+        <img src="/TVT.png" alt="logo" className="h-16"/>
         </Link>
         <p className="text-sm mt-5">
           Bạn cần phải đăng nhập với email và mật khẩu hoặc tài khoản Google

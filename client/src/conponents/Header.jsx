@@ -63,7 +63,7 @@ export default function Header() {
         <img 
             src="/TVT.png" 
             alt="logo" 
-            className="h-10 relative z-10 transition-transform duration-300 ease-in-out group-hover:scale-125"
+            className="h-16 relative z-10 transition-transform duration-300 ease-in-out group-hover:scale-125"
         />
         </Link>
 

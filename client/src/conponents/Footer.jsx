@@ -9,7 +9,7 @@ export default function FooterCom() {
                 <div className="mt-5">
                     <Link to="/" className="self-center whitespace-nowrap text-lg 
                         sm:text-xl font-semibold dark:text-white">
-                    <img src="/TVT.png" alt="logo" className="h-10"/>
+                    <img src="/TVT.png" alt="logo" className="h-16"/>
                     </Link>
                 </div>
                     <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6">

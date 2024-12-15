@@ -25,7 +25,7 @@ export const create = async(req, res,next) => {
 export const getposts = async (req, res, next) => {
     try {
         const startIndex = parseInt(req.query.startIndex) || 0;
-        const limit = parseInt(req.query.limit) || 9;
+        const limit = parseInt(req.query.limit) || 20;
         const sortDirection = req.query.order === 'asc' ? 1 : -1;
         
         console.log("Start fetching posts with params:", req.query);
@@ -58,7 +58,6 @@ export const getposts = async (req, res, next) => {
         next(err); // Chuyển lỗi cho middleware xử lý
     }
 };
-
 
 export const deletepost = async(req, res,next) => {
     if(!req.user.isAdmin || req.user.id !== req.params.userId){
