@@ -108,7 +108,7 @@ export default function Home() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          Chào mừng bạn đến TVT Blog
+          Chào mừng bạn đến 24/7 Blog!
         </motion.h1>
         <motion.p
           className='text-gray-500 text-xs sm:text-sm'
